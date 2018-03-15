@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import './homePage.dart'
+import './homePage.dart';
 
 void main() => runApp(new MyApp());
 
@@ -10,8 +10,8 @@ class MyApp extends StatelessWidget {
       title: "Material Page Reveal",
       theme: new ThemeData(
         primarySwatch: Colors.blue,
-        home: new HomePage()
       ),
+      home: new HomePage(),
     );
   }
 }
