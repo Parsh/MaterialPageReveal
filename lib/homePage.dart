@@ -8,8 +8,14 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return new Container(
-      
+    return new Scaffold(
+      body: new Stack(
+        children: <Widget>[
+          new Container(
+            color: Colors.blue,
+          ),
+        ],
+      ),
     );
   }
 }
