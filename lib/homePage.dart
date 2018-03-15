@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import './page.dart';
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => new _HomePageState();
@@ -11,9 +13,7 @@ class _HomePageState extends State<HomePage> {
     return new Scaffold(
       body: new Stack(
         children: <Widget>[
-          new Container(
-            color: Colors.blue,
-          ),
+          new Page()
         ],
       ),
     );
