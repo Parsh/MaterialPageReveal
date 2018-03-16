@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import './page.dart';
+import 'page.dart';
+import 'page_reveal.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -17,9 +18,12 @@ class _HomePageState extends State<HomePage> {
             viewModel: pages[0],
             percentVisible: 1.0,
           ),
-          new Page(
-            viewModel: pages[1],
-            percentVisible: 1.0,
+          new PageReveal(
+            revealPercent: 1.0,
+            child: new Page(
+              viewModel: pages[1],
+              percentVisible: 1.0,
+            ),
           ),
         ],
       ),
