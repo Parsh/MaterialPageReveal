@@ -24,17 +24,20 @@ class CircleRevealClipper extends CustomClipper<Rect> {
 
   @override
   Rect getClip(Size size) {
-    final epicenter = new Offset(size.width/2, size.height * 0.9);  //epicenter is the place where the clipping will begin
+    final epicenter = new Offset(
+        size.width / 2,
+        size.height *
+            0.9); //epicenter is the place where the clipping will begin
 
     //Calculate the distance from the epicenter to the top left corner to make sure that we do fill the screen.
-    double theta = atan(epicenter.dy/ epicenter.dx);
-    final distanceToCorner = epicenter.dy/ sin(theta);
+    double theta = atan(epicenter.dy / epicenter.dx);
+    final distanceToCorner = epicenter.dy / sin(theta);
 
     final radius = distanceToCorner * revealPercent;
     final diameter = 2 * radius;
 
-    return new Rect.fromLTWH(epicenter.dx - radius, epicenter.dy - radius, diameter, diameter);
-  
+    return new Rect.fromLTWH(
+        epicenter.dx - radius, epicenter.dy - radius, diameter, diameter);
   }
 
   @override
