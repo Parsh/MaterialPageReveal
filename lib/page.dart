@@ -91,8 +91,7 @@ class PageViewModel {
 
   PageViewModel(
       { // {} makes the parameters optional but helps with supplying name parameters
-      this.color: Colors
-          .pink, //after colon values are default values which are used when the parameter isn't passed
+      this.color: Colors.pink, //after colon values are default values which are used when the parameter isn't passed
       this.heroAssetPath,
       this.title: "Title",
       this.body: "Body",
