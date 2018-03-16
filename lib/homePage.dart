@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'page.dart';
-import 'page_reveal.dart';
-import 'pager_indicator.dart';
+import './page.dart';
+import './page_reveal.dart';
+import './pager_indicator.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -26,7 +26,14 @@ class _HomePageState extends State<HomePage> {
               percentVisible: 1.0,
             ),
           ),
-        new PagerIndicator()
+        new PagerIndicator(
+          pagerIndicatorViewModel: new PagerIndicatorViewModel(
+             pages: pages,
+             activeIndex: 1,
+             slideDirection: SlideDirection.none,
+             slidePercent: 0.0
+          )
+        )
         ],
       ),
     );

@@ -1,4 +1,4 @@
-import 'dart:ui';
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 
@@ -15,12 +15,13 @@ class PagerIndicator extends StatelessWidget {
     List<PageBubble> bubbles = [];
     for(var i = 0; i < pagerIndicatorViewModel.pages.length; ++i){
       final page = pagerIndicatorViewModel.pages[i];
+    
       bubbles.add(
         new PageBubble(
           pageBubbleViewModel: new PageBubbleViewModel(
                     color: page.color,
                     iconAssetPath: page.iconAssetIcons,
-                    isHollow: true,
+                    isHollow: i > pagerIndicatorViewModel.activeIndex,
                     activePercent: i == pagerIndicatorViewModel.activeIndex? 1.0: 0.0)
         )
       );
@@ -33,27 +34,7 @@ class PagerIndicator extends StatelessWidget {
         ),
         new Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: bubbles
-          // children: <Widget>[
-          //  new PageBubble(
-          //       pageBubbleViewModel: new PageBubbleViewModel(
-          //           color: Colors.green,
-          //           iconAssetPath: 'assets/shopping_cart.png',
-          //           isHollow: true,
-          //           activePercent: 0.0)),
-          //   new PageBubble(
-          //       pageBubbleViewModel: new PageBubbleViewModel(
-          //           color: Colors.green,
-          //           iconAssetPath: 'assets/shopping_cart.png',
-          //           isHollow: false,
-          //           activePercent: 1.0)),
-          //   new PageBubble(
-          //       pageBubbleViewModel: new PageBubbleViewModel(
-          //           color: Colors.green,
-          //           iconAssetPath: 'assets/shopping_cart.png',
-          //           isHollow: true,
-          //           activePercent: 0.0))
-          // ],
+           children: bubbles
         )
       ],
     );
@@ -70,8 +51,8 @@ class PageBubble extends StatelessWidget {
     return new Padding(
       padding: const EdgeInsets.all(10.0),
       child: new Container(
-          width: lerpDouble(20.0, 45.0, pageBubbleViewModel.activePercent),
-          height: lerpDouble(20.0, 45.0, pageBubbleViewModel.activePercent),
+          width: ui.lerpDouble(20.0, 45.0, pageBubbleViewModel.activePercent),
+          height: ui.lerpDouble(20.0, 45.0, pageBubbleViewModel.activePercent),
           decoration: new BoxDecoration(
               color: pageBubbleViewModel.isHollow? Colors.transparent: new Color(0x88FFFFFF), //Showing a fill when not hollow
               shape: BoxShape.circle,

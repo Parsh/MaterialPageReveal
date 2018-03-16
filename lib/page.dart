@@ -14,11 +14,11 @@ final List<PageViewModel> pages = [
       body: "We carefully verify all banks before adding them into the app",
       iconAssetIcons: "assets/wallet.png"),
   new PageViewModel(
-    color: new Color(0xFF9B90BC),
-    heroAssetPath: "assets/stores.png",
-    title: "Stores",
-    body: "All local stores are categorized for your convenience",
-  ),
+      color: new Color(0xFF9B90BC),
+      heroAssetPath: "assets/stores.png",
+      title: "Stores",
+      body: "All local stores are categorized for your convenience",
+      iconAssetIcons: "assets/wallet.png"),
 ];
 
 class Page extends StatelessWidget {
@@ -91,7 +91,8 @@ class PageViewModel {
 
   PageViewModel(
       { // {} makes the parameters optional but helps with supplying name parameters
-      this.color: Colors.pink, //after colon values are default values which are used when the parameter isn't passed
+      this.color: Colors
+          .pink, //after colon values are default values which are used when the parameter isn't passed
       this.heroAssetPath,
       this.title: "Title",
       this.body: "Body",
