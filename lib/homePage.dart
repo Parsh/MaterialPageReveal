@@ -14,8 +14,13 @@ class _HomePageState extends State<HomePage> {
       body: new Stack(
         children: <Widget>[
           new Page(
-            viewModel: pages[0]
-          )
+            viewModel: pages[0],
+            percentVisible: 1.0,
+          ),
+          new Page(
+            viewModel: pages[1],
+            percentVisible: 1.0,
+          ),
         ],
       ),
     );
