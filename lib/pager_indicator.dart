@@ -45,7 +45,12 @@ class PagerIndicator extends StatelessWidget {
 
     final  double bubbleWidth = 55.0;
     final double baseTranslation = ((pagerIndicatorViewModel.pages.length * bubbleWidth)/2) - bubbleWidth/2;
-    final double translation = baseTranslation - (pagerIndicatorViewModel.activeIndex * bubbleWidth);
+    double translation = baseTranslation - (pagerIndicatorViewModel.activeIndex * bubbleWidth);
+    if (pagerIndicatorViewModel.slideDirection == SlideDirection.leftToRight){
+      translation += bubbleWidth * pagerIndicatorViewModel.slidePercent;
+    } else if (pagerIndicatorViewModel.slideDirection == SlideDirection.rightToLeft){
+      translation -= bubbleWidth * pagerIndicatorViewModel.slidePercent;
+    }
 
     return new Column(
       children: <Widget>[
