@@ -6,9 +6,14 @@ import 'pager_indicator.dart';
 
 class PageDragger extends StatefulWidget {
 
+  final bool canDragLeftToRight;
+  final bool canDragRightToLeft;
+
   final StreamController<SlideUpdate> slideUpdateStream;
   PageDragger({
-    this.slideUpdateStream
+    this.slideUpdateStream,
+    this.canDragLeftToRight,
+    this.canDragRightToLeft
   });
 
   @override
@@ -30,21 +35,26 @@ class _PageDraggerState extends State<PageDragger> {
     if (dragStart != null){
       final newPosition = details.globalPosition;
       final dx = dragStart.dx - newPosition.dx;
-      if (dx>0.0){
+      if (dx>0.0 && widget.canDragRightToLeft){
         slideDirection = SlideDirection.rightToLeft;
-      } else if (dx<0.0){
+      } else if (dx<0.0 && widget.canDragLeftToRight){
         slideDirection = SlideDirection.leftToRight;
       } else {
         slideDirection = SlideDirection.none;
       }
 
-      slidePercent = (dx/FullTransition_px).abs().clamp(0.0, 1.0);
-      print("Dragging in $slideDirection at $slidePercent");
-      widget.slideUpdateStream.add(new SlideUpdate(direction: slideDirection, slidePercent: slidePercent));
+      if (slideDirection != SlideDirection.none){
+        slidePercent = (dx/FullTransition_px).abs().clamp(0.0, 1.0);
+      } else{
+        slidePercent = 0.0;
+      }
+      
+      widget.slideUpdateStream.add(new SlideUpdate(direction: slideDirection, slidePercent: slidePercent, updateType: UpdateType.dragging));
     }
   }
 
   onDragEnd(DragEndDetails details){
+    widget.slideUpdateStream.add(new SlideUpdate(direction: SlideDirection.none, slidePercent: 0.0, updateType: UpdateType.doneDragging));
     dragStart = null;
   }
 
@@ -58,14 +68,21 @@ class _PageDraggerState extends State<PageDragger> {
   }
 }
 
+enum UpdateType{
+  dragging,
+  doneDragging
+}
+
 class SlideUpdate{
 
   final SlideDirection direction;
   final double slidePercent;
+  final UpdateType updateType;
 
   SlideUpdate({
     this.direction,
-    this.slidePercent
+    this.slidePercent,
+    this.updateType
   });
 
 

@@ -13,20 +13,39 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   int acitveIndex = 0;
+  int nextPageIndex = 0;
   SlideDirection slideDirection = SlideDirection.none;
   double slidePercent = 0.0;
 
- StreamController<SlideUpdate> slideUpdateStream;
+  StreamController<SlideUpdate> slideUpdateStream;
 
-  _HomePageState(){
+  _HomePageState() {
     this.slideUpdateStream = new StreamController<SlideUpdate>();
-    slideUpdateStream.stream.listen((SlideUpdate event){
-        setState((){
+    slideUpdateStream.stream.listen((SlideUpdate event) {
+      setState(() {
+        if (event.updateType == UpdateType.dragging) {
           slideDirection = event.direction;
           slidePercent = event.slidePercent;
-        });
+
+          if (slideDirection == SlideDirection.leftToRight) {
+            nextPageIndex = acitveIndex - 1;
+          } else if (slideDirection == SlideDirection.rightToLeft) {
+            nextPageIndex = acitveIndex + 1;
+          } else {
+            nextPageIndex = acitveIndex;
+          }
+        } else if (event.updateType == UpdateType.doneDragging) {
+          if (slidePercent > 0.5) {
+            acitveIndex = slideDirection == SlideDirection.leftToRight
+                ? acitveIndex - 1
+                : acitveIndex + 1;
+          }
+
+          slideDirection = SlideDirection.none;
+          slidePercent = 0.0;
+        }
+      });
     });
   }
 
@@ -42,21 +61,21 @@ class _HomePageState extends State<HomePage> {
           new PageReveal(
             revealPercent: slidePercent,
             child: new Page(
-              viewModel: pages[1],
+              viewModel: pages[nextPageIndex],
               percentVisible: slidePercent,
             ),
           ),
-        new PagerIndicator(
-          pagerIndicatorViewModel: new PagerIndicatorViewModel(
-             pages: pages,
-             activeIndex: acitveIndex,
-             slideDirection: slideDirection,
-             slidePercent: slidePercent
+          new PagerIndicator(
+              pagerIndicatorViewModel: new PagerIndicatorViewModel(
+                  pages: pages,
+                  activeIndex: acitveIndex,
+                  slideDirection: slideDirection,
+                  slidePercent: slidePercent)),
+          new PageDragger(
+            canDragLeftToRight: acitveIndex > 0,
+            canDragRightToLeft: acitveIndex < pages.length - 1,
+            slideUpdateStream: this.slideUpdateStream,
           )
-        ),
-        new PageDragger(
-         slideUpdateStream: this.slideUpdateStream,
-        )
         ],
       ),
     );
