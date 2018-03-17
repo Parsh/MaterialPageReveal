@@ -30,8 +30,10 @@ class PagerIndicator extends StatelessWidget {
         percentActive = 0.0;
       }
 
-      bool isHollow = i > pagerIndicatorViewModel.activeIndex || ( i == pagerIndicatorViewModel.activeIndex && pagerIndicatorViewModel.slideDirection == SlideDirection.leftToRight);
-
+      bool isHollow = i > pagerIndicatorViewModel.activeIndex ||
+          (i == pagerIndicatorViewModel.activeIndex &&
+              pagerIndicatorViewModel.slideDirection ==
+                  SlideDirection.leftToRight);
 
       bubbles.add(new PageBubble(
           pageBubbleViewModel: new PageBubbleViewModel(
@@ -41,12 +43,19 @@ class PagerIndicator extends StatelessWidget {
               activePercent: percentActive)));
     }
 
+    final  double bubbleWidth = 55.0;
+    final double baseTranslation = ((pagerIndicatorViewModel.pages.length * bubbleWidth)/2) - bubbleWidth/2;
+    final double translation = baseTranslation - (pagerIndicatorViewModel.activeIndex * bubbleWidth);
+
     return new Column(
       children: <Widget>[
         new Expanded(
           child: new Container(),
         ),
-        new Row(mainAxisAlignment: MainAxisAlignment.center, children: bubbles)
+        new Transform(
+            transform: new Matrix4.translationValues(translation, 0.0, 0.0),
+            child: new Row(
+                mainAxisAlignment: MainAxisAlignment.center, children: bubbles))
       ],
     );
   }
@@ -59,28 +68,35 @@ class PageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: new Container(
-          width: ui.lerpDouble(20.0, 45.0, pageBubbleViewModel.activePercent),
-          height: ui.lerpDouble(20.0, 45.0, pageBubbleViewModel.activePercent),
-          decoration: new BoxDecoration(
-              color: pageBubbleViewModel.isHollow
-                  ? new Color(0x88FFFFFF).withAlpha((0x88 * pageBubbleViewModel.activePercent).round())
-                  : new Color(0x88FFFFFF), //Showing a fill when not hollow
-              shape: BoxShape.circle,
-              border: new Border.all(
-                  color: pageBubbleViewModel.isHollow
-                      ? new Color(0x88FFFFFF).withAlpha((0x88 * (1 - pageBubbleViewModel.activePercent)).round())
-                      : Colors.transparent, //Showing border when is hollow
-                  width: 3.0)),
-          child: new Opacity(
-            opacity: pageBubbleViewModel.activePercent,
-            child: new Image.asset(
-              pageBubbleViewModel.iconAssetPath,
-              color: pageBubbleViewModel.color,
-            ),
-          )),
+    return new Container(
+      width: 55.0,
+      height: 65.0,
+      child: new Center(
+        child: new Container(
+            width: ui.lerpDouble(20.0, 45.0, pageBubbleViewModel.activePercent),
+            height:
+                ui.lerpDouble(20.0, 45.0, pageBubbleViewModel.activePercent),
+            decoration: new BoxDecoration(
+                color: pageBubbleViewModel.isHollow
+                    ? new Color(0x88FFFFFF).withAlpha(
+                        (0x88 * pageBubbleViewModel.activePercent).round())
+                    : new Color(0x88FFFFFF), //Showing a fill when not hollow
+                shape: BoxShape.circle,
+                border: new Border.all(
+                    color: pageBubbleViewModel.isHollow
+                        ? new Color(0x88FFFFFF).withAlpha(
+                            (0x88 * (1 - pageBubbleViewModel.activePercent))
+                                .round())
+                        : Colors.transparent, //Showing border when is hollow
+                    width: 3.0)),
+            child: new Opacity(
+              opacity: pageBubbleViewModel.activePercent,
+              child: new Image.asset(
+                pageBubbleViewModel.iconAssetPath,
+                color: pageBubbleViewModel.color,
+              ),
+            )),
+      ),
     );
   }
 }

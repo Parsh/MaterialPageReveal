@@ -29,9 +29,9 @@ class _HomePageState extends State<HomePage> {
         new PagerIndicator(
           pagerIndicatorViewModel: new PagerIndicatorViewModel(
              pages: pages,
-             activeIndex: 1,
-             slideDirection: SlideDirection.leftToRight,
-             slidePercent: 1.0
+             activeIndex: 0,
+             slideDirection: SlideDirection.none,
+             slidePercent: 0.0
           )
         )
         ],
