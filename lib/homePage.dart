@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import './page.dart';
 import './page_reveal.dart';
 import './pager_indicator.dart';
+import 'page_dragger.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -33,6 +34,9 @@ class _HomePageState extends State<HomePage> {
              slideDirection: SlideDirection.leftToRight,
              slidePercent: 0.0
           )
+        ),
+        new PageDragger(
+          
         )
         ],
       ),
