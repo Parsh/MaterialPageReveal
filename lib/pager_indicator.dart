@@ -11,20 +11,34 @@ class PagerIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     List<PageBubble> bubbles = [];
-    for(var i = 0; i < pagerIndicatorViewModel.pages.length; ++i){
+    for (var i = 0; i < pagerIndicatorViewModel.pages.length; ++i) {
       final page = pagerIndicatorViewModel.pages[i];
-    
-      bubbles.add(
-        new PageBubble(
+
+      double percentActive;
+      if (i == pagerIndicatorViewModel.activeIndex) {
+        percentActive = 1 - pagerIndicatorViewModel.slidePercent;
+      } else if (i == pagerIndicatorViewModel.activeIndex - 1 &&
+          pagerIndicatorViewModel.slideDirection ==
+              SlideDirection.leftToRight) {
+        percentActive = pagerIndicatorViewModel.slidePercent;
+      } else if (i == pagerIndicatorViewModel.activeIndex + 1 &&
+          pagerIndicatorViewModel.slideDirection ==
+              SlideDirection.rightToLeft) {
+        percentActive = pagerIndicatorViewModel.slidePercent;
+      } else {
+        percentActive = 0.0;
+      }
+
+      bool isHollow = i > pagerIndicatorViewModel.activeIndex || ( i == pagerIndicatorViewModel.activeIndex && pagerIndicatorViewModel.slideDirection == SlideDirection.leftToRight);
+
+
+      bubbles.add(new PageBubble(
           pageBubbleViewModel: new PageBubbleViewModel(
-                    color: page.color,
-                    iconAssetPath: page.iconAssetIcons,
-                    isHollow: i > pagerIndicatorViewModel.activeIndex,
-                    activePercent: i == pagerIndicatorViewModel.activeIndex? 1.0: 0.0)
-        )
-      );
+              color: page.color,
+              iconAssetPath: page.iconAssetIcons,
+              isHollow: isHollow,
+              activePercent: percentActive)));
     }
 
     return new Column(
@@ -32,10 +46,7 @@ class PagerIndicator extends StatelessWidget {
         new Expanded(
           child: new Container(),
         ),
-        new Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-           children: bubbles
-        )
+        new Row(mainAxisAlignment: MainAxisAlignment.center, children: bubbles)
       ],
     );
   }
@@ -54,22 +65,23 @@ class PageBubble extends StatelessWidget {
           width: ui.lerpDouble(20.0, 45.0, pageBubbleViewModel.activePercent),
           height: ui.lerpDouble(20.0, 45.0, pageBubbleViewModel.activePercent),
           decoration: new BoxDecoration(
-              color: pageBubbleViewModel.isHollow? Colors.transparent: new Color(0x88FFFFFF), //Showing a fill when not hollow
+              color: pageBubbleViewModel.isHollow
+                  ? new Color(0x88FFFFFF).withAlpha((0x88 * pageBubbleViewModel.activePercent).round())
+                  : new Color(0x88FFFFFF), //Showing a fill when not hollow
               shape: BoxShape.circle,
               border: new Border.all(
-                color: pageBubbleViewModel.isHollow? new Color(0x88FFFFFF): Colors.transparent, //Showing border when is hollow
-                width: 3.0
-              )            
-              ),
+                  color: pageBubbleViewModel.isHollow
+                      ? new Color(0x88FFFFFF).withAlpha((0x88 * (1 - pageBubbleViewModel.activePercent)).round())
+                      : Colors.transparent, //Showing border when is hollow
+                  width: 3.0)),
           child: new Opacity(
             opacity: pageBubbleViewModel.activePercent,
             child: new Image.asset(
               pageBubbleViewModel.iconAssetPath,
               color: pageBubbleViewModel.color,
             ),
-          )
-        ), 
-      );
+          )),
+    );
   }
 }
 
