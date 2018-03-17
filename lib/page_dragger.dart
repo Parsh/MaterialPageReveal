@@ -125,15 +125,16 @@ class AnimatedPageDragger{
       if (status == AnimationStatus.completed){
         slideUpdateStream.add(
           new SlideUpdate(
-            updateType: UpdateType.doneDragging,
+            updateType: UpdateType.doneAnimating,
             direction: slideDirection,
             slidePercent: endSlidePercent
           )
         );
       }
     });
+  }
 
-    run(){
+   run(){
       completeAnimationContorller.forward(from: 0.0);
     }
 
@@ -141,7 +142,6 @@ class AnimatedPageDragger{
       completeAnimationContorller.dispose();
     }
 
-  }
 }
 
 enum UpdateType{
