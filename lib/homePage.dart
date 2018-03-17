@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import './page.dart';
@@ -11,32 +13,49 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  int acitveIndex = 0;
+  SlideDirection slideDirection = SlideDirection.none;
+  double slidePercent = 0.0;
+
+ StreamController<SlideUpdate> slideUpdateStream;
+
+  _HomePageState(){
+    this.slideUpdateStream = new StreamController<SlideUpdate>();
+    slideUpdateStream.stream.listen((SlideUpdate event){
+        setState((){
+          slideDirection = event.direction;
+          slidePercent = event.slidePercent;
+        });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       body: new Stack(
         children: <Widget>[
           new Page(
-            viewModel: pages[0],
+            viewModel: pages[acitveIndex],
             percentVisible: 1.0,
           ),
           new PageReveal(
-            revealPercent: 1.0,
+            revealPercent: slidePercent,
             child: new Page(
               viewModel: pages[1],
-              percentVisible: 1.0,
+              percentVisible: slidePercent,
             ),
           ),
         new PagerIndicator(
           pagerIndicatorViewModel: new PagerIndicatorViewModel(
              pages: pages,
-             activeIndex: 0,
-             slideDirection: SlideDirection.none,
-             slidePercent: 0.0
+             activeIndex: acitveIndex,
+             slideDirection: slideDirection,
+             slidePercent: slidePercent
           )
         ),
         new PageDragger(
-
+         slideUpdateStream: this.slideUpdateStream,
         )
         ],
       ),
