@@ -18,7 +18,7 @@ final List<PageViewModel> pages = [
       heroAssetPath: "assets/stores.png",
       title: "Stores",
       body: "All local stores are categorized for your convenience",
-      iconAssetIcons: "assets/wallet.png"),
+      iconAssetIcons: "assets/shopping_cart.png"),
 ];
 
 class Page extends StatelessWidget {

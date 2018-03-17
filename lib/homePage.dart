@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     this.slideUpdateStream = new StreamController<SlideUpdate>();
     slideUpdateStream.stream.listen((SlideUpdate event) {
       setState(() {
-        if (event.updateType == UpdateType.dragging || event.updateType == UpdateType.animating) {
+        if (event.updateType == UpdateType.dragging) {
           slideDirection = event.direction;
           slidePercent = event.slidePercent;
 
@@ -39,34 +39,33 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         } else if (event.updateType == UpdateType.doneDragging) {
           if (slidePercent > 0.5) {
             animatedPageDragger = new AnimatedPageDragger(
-              slideDirection: slideDirection,
-              transitionGoal: TransitionGoal.open,
-              slidePercent: slidePercent,
-              slideUpdateStream: slideUpdateStream,
-              vsync: this
-            );
+                slideDirection: slideDirection,
+                transitionGoal: TransitionGoal.open,
+                slidePercent: slidePercent,
+                slideUpdateStream: slideUpdateStream,
+                vsync: this);
           } else {
             animatedPageDragger = new AnimatedPageDragger(
-              slideDirection: slideDirection,
-              transitionGoal: TransitionGoal.close,
-              slidePercent: slidePercent,
-              slideUpdateStream: slideUpdateStream,
-              vsync: this
-            );
-          }   
-          animatedPageDragger.run();
-        } else if (event.updateType == UpdateType.doneAnimating){
-                acitveIndex = slideDirection == SlideDirection.leftToRight
-                ? acitveIndex - 1
-                : acitveIndex + 1;
+                slideDirection: slideDirection,
+                transitionGoal: TransitionGoal.close,
+                slidePercent: slidePercent,
+                slideUpdateStream: slideUpdateStream,
+                vsync: this);
+
+            nextPageIndex = acitveIndex;
           }
+          animatedPageDragger.run();
+        } else if (event.updateType == UpdateType.animating) {
+          slideDirection = event.direction;
+          slidePercent = event.slidePercent;
+        } else if (event.updateType == UpdateType.doneAnimating) {
+          acitveIndex = nextPageIndex;
 
           slideDirection = SlideDirection.none;
           slidePercent = 0.0;
-
           animatedPageDragger.dispose();
         }
-      );
+      });
     });
   }
 
